@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Search → GitHub Tracker",
+  "version": "1.0",
+  "description": "Tracks your search engine queries in Firefox and sends them to a local backend.",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "tabs",
+    "webNavigation",
+    "storage",
+    "*://*/*",
+    "http://localhost/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "search-tracker@example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}

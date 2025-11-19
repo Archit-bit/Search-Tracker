@@ -1,0 +1,8 @@
+# Node modules
+node_modules/
+
+# Database file
+search-tracker-backend/data.db
+
+# Local env file (will recreate locally, not pushed)
+search-tracker-backend/.env

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Search → GitHub Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Search → GitHub Tracker</h1>
+    <p>
+      Recent searches captured from Firefox (address bar) and their recommended
+      GitHub repos.
+    </p>
+
+    <div class="controls">
+      <label for="languageFilter">Filter by language:</label>
+      <select id="languageFilter">
+        <option value="">All</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="Python">Python</option>
+        <option value="Go">Go</option>
+        <option value="Rust">Rust</option>
+        <option value="C#">C#</option>
+      </select>
+      <button id="refreshBtn">Refresh</button>
+    </div>
+
+    <div id="searchesContainer"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
