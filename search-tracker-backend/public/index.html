@@ -2,31 +2,47 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search → GitHub Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Search → GitHub Tracker</h1>
-    <p>
-      Recent searches captured from Firefox (address bar) and their recommended
-      GitHub repos.
-    </p>
+    <div class="background-gradient"></div>
+    <div class="app-container">
+      <header>
+        <h1>Search <span class="highlight">→</span> GitHub Tracker</h1>
+        <p class="subtitle">
+          Recent searches captured from Firefox and their recommended GitHub repos.
+        </p>
+      </header>
 
-    <div class="controls">
-      <label for="languageFilter">Filter by language:</label>
-      <select id="languageFilter">
-        <option value="">All</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="TypeScript">TypeScript</option>
-        <option value="Python">Python</option>
-        <option value="Go">Go</option>
-        <option value="Rust">Rust</option>
-        <option value="C#">C#</option>
-      </select>
-      <button id="refreshBtn">Refresh</button>
+      <div class="controls glass-panel">
+        <div class="control-group">
+          <label for="languageFilter">Filter by language</label>
+          <div class="select-wrapper">
+            <select id="languageFilter">
+              <option value="">All Languages</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="TypeScript">TypeScript</option>
+              <option value="Python">Python</option>
+              <option value="Go">Go</option>
+              <option value="Rust">Rust</option>
+              <option value="C#">C#</option>
+            </select>
+            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+        </div>
+        <button id="refreshBtn" class="btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div id="searchesContainer" class="grid-container"></div>
     </div>
-
-    <div id="searchesContainer"></div>
 
     <script src="app.js"></script>
   </body>

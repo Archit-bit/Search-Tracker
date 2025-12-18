@@ -188,7 +188,7 @@ app.get("/api/recent-searches", (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 20;
 
   db.all(
-    `SELECT * FROM searches ORDER BY datetime(created_at) DESC LIMIT ?`,
+    `SELECT * FROM searches ORDER BY id DESC LIMIT ?`,
     [limit],
     (err, searches) => {
       if (err) {
@@ -214,18 +214,23 @@ app.get("/api/recent-searches", (req, res) => {
             return res.status(500).json({ error: "database error" });
           }
 
-          const grouped = {};
-          for (const s of searches) {
-            grouped[s.id] = { ...s, repos: [] };
-          }
+          // Create a map for fast lookup, but keep the original order
+          const searchMap = {};
+          // We want to return the searches in the same order as 'searches' (which is DESC)
+          // So we'll map 'searches' to a new array of objects with repos initialized
+          const orderedSearches = searches.map(s => {
+            const sWithRepos = { ...s, repos: [] };
+            searchMap[s.id] = sWithRepos;
+            return sWithRepos;
+          });
 
           for (const r of repos) {
-            if (grouped[r.search_id]) {
-              grouped[r.search_id].repos.push(r);
+            if (searchMap[r.search_id]) {
+              searchMap[r.search_id].repos.push(r);
             }
           }
 
-          res.json(Object.values(grouped));
+          res.json(orderedSearches);
         }
       );
     }
