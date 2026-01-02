@@ -1,13 +1,14 @@
 # Browse & Search Tracker
 
-Track **all your browsing activity** in Firefox and automatically discover related GitHub repositories.
+Track **all your browsing activity** in Firefox and automatically discover related GitHub repositories with **AI-powered analysis**.
 
 This project consists of:
 
 - **Firefox WebExtension** – Tracks all page visits and search queries, including single-page app navigation (YouTube, Twitter, etc.)
-- **Node.js + Express + SQLite backend** – Logs visits, extracts keywords from page titles, fetches matching GitHub repositories, and serves a modern dashboard UI.
+- **Node.js + Express + SQLite backend** – Logs visits, uses AI to extract keywords, fetches GitHub repositories, and serves a modern dashboard UI.
+- **Google Gemini AI Integration** – Intelligently analyzes page content and provides repo summaries
 
-> All processing happens locally. The only external network call is from the backend to the GitHub REST API (optional, if you configure a token).
+> All processing happens locally. External calls: GitHub REST API (for repos) and Google Gemini API (for AI features).
 
 ---
 
@@ -20,26 +21,28 @@ This project consists of:
 - **Single-Page Apps** - Tracks History API changes (YouTube, Twitter, etc.)
 - **Smart Deduplication** - Prevents duplicate entries with intelligent debouncing
 
-### 🧠 Intelligent Keyword Extraction
-For every page visit, the system:
-- Extracts meaningful keywords from page titles
-- Removes platform names (YouTube, Twitter, etc.)
-- Filters out stop words and generic terms
-- Uses extracted keywords to search GitHub for relevant repos
+### 🤖 AI-Powered Features (Gemini)
+- **Smart Keyword Extraction** - AI analyzes page titles to extract relevant technical keywords
+- **Optimized GitHub Queries** - AI generates better search queries for more relevant repos
+- **Repo Summaries** - Each discovered repo gets an AI-generated summary explaining what it does
+- **Browsing Insights** - AI analyzes your browsing patterns and provides learning recommendations
+- **Relevance Analysis** - AI explains why each repo matches your interests
 
 ### 🐙 GitHub Repository Suggestions
 - Automatically searches GitHub for **every visit** with extractable keywords
 - Returns top 5 repositories sorted by stars
-- Shows repo name, star count, and programming language
+- **AI-generated summaries** for each repo
+- Shows repo name, star count, language, and summary
 - Filter repos by language in the dashboard
 
 ### 📊 Modern Dashboard
 Beautiful glassmorphism UI at `http://localhost:4001`:
+- **AI Status Badge** - Shows if AI features are enabled
 - **Stats Panel** - Total visits, searches, and page visits
-- **Tab Navigation** - Filter by All Activity, Searches, or Page Visits
+- **Tab Navigation** - All Activity, Searches, Page Visits, AI Insights
+- **AI Insights Tab** - View AI analysis of your browsing patterns
 - **Domain Filter** - Filter by most visited domains
 - **Language Filter** - Filter repos by programming language
-- **Keywords Badge** - See what keywords were extracted from page titles
 - **Responsive Design** - Works on desktop and mobile
 
 ---
@@ -49,9 +52,9 @@ Beautiful glassmorphism UI at `http://localhost:4001`:
 ```text
 search-tracker/
 ├── search-tracker-backend/
-│   ├── server.js           # Express server with SQLite
+│   ├── server.js           # Express server with SQLite + Gemini AI
 │   ├── package.json
-│   ├── .env                # PORT and GITHUB_TOKEN config
+│   ├── .env                # PORT, GITHUB_TOKEN, GEMINI_API_KEY
 │   ├── data.db             # SQLite database (created at runtime)
 │   └── public/
 │       ├── index.html      # Dashboard HTML
@@ -83,9 +86,12 @@ Create a `.env` file:
 ```env
 PORT=4001
 GITHUB_TOKEN=your_github_personal_access_token
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
-> Get a GitHub token from [GitHub Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
+> **GitHub Token**: Get from [GitHub Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
+> 
+> **Gemini API Key**: Get from [Google AI Studio](https://makersuite.google.com/app/apikey) (free tier available)
 
 ### 4. Start the server
 ```bash
@@ -107,9 +113,11 @@ Navigate to `http://localhost:4001`
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/log-visit` | POST | Log a page visit (called by extension) |
-| `/api/recent-visits` | GET | Get recent visits with repos |
+| `/api/recent-visits` | GET | Get recent visits with repos and AI summaries |
 | `/api/recent-searches` | GET | Get recent search queries with repos |
 | `/api/visit-stats` | GET | Get visit statistics |
+| `/api/insights` | GET | Get AI-generated browsing insights |
+| `/api/ai-status` | GET | Check AI status and features |
 | `/api/health` | GET | Health check |
 
 ---
@@ -125,7 +133,7 @@ Navigate to `http://localhost:4001`
 | domain | TEXT | Domain name |
 | type | TEXT | 'search' or 'page_visit' |
 | query | TEXT | Search query (if search) |
-| extracted_keywords | TEXT | Keywords extracted from title |
+| extracted_keywords | TEXT | AI-extracted keywords from title |
 | source | TEXT | Navigation source |
 | created_at | TEXT | ISO timestamp |
 
@@ -139,15 +147,42 @@ Navigate to `http://localhost:4001`
 | description | TEXT | Repository description |
 | stargazers_count | INTEGER | Star count |
 | language | TEXT | Primary language |
+| ai_summary | TEXT | AI-generated summary |
 | created_at | TEXT | ISO timestamp |
+
+---
+
+## 🤖 AI Features in Detail
+
+### Smart Keyword Extraction
+When you visit a page, the AI:
+1. Analyzes the page title and domain
+2. Identifies technical/programming keywords
+3. Removes generic words and platform names
+4. Returns focused keywords for GitHub search
+
+### Repo Summaries
+For each discovered repository, the AI:
+1. Reads the repo name and description
+2. Considers the context (what you were browsing)
+3. Generates a 1-2 sentence summary
+4. Explains why it's relevant to your interests
+
+### Browsing Insights
+The AI Insights tab provides:
+- **Topics** - Main technologies you're exploring
+- **Skills** - Skills being developed
+- **Learning Style** - How you prefer to learn
+- **Learning Path** - Suggested next steps
+- **Repo Analysis** - Detailed analysis of top repos with relevance explanations
 
 ---
 
 ## 🛡 Privacy
 
-- **100% Local** - All data stays on your machine
-- **No External Tracking** - Only GitHub API calls (optional)
-- **No Analytics** - No data is sent to third parties
+- **Local Processing** - All data stays on your machine
+- **Optional AI** - Works without Gemini (basic keyword extraction)
+- **No Tracking** - No analytics or third-party tracking
 - **Skip Patterns** - Internal browser pages are automatically ignored
 
 ---

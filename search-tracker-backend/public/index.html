@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Browse & Search Tracker</title>
-    <meta name="description" content="Track your browsing history and search queries, discover relevant GitHub repositories" />
+    <meta name="description" content="AI-powered browsing tracker with GitHub repo suggestions" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,8 +16,9 @@
       <header>
         <h1>Browse <span class="highlight">&</span> Search Tracker</h1>
         <p class="subtitle">
-          Track all your page visits and searches with recommended GitHub repos.
+          AI-powered browsing tracker with intelligent GitHub repo suggestions.
         </p>
+        <div id="aiStatus" class="ai-status"></div>
       </header>
 
       <!-- Stats Panel -->
@@ -36,6 +37,20 @@
         </div>
       </div>
 
+      <!-- AI Insights Panel -->
+      <div id="insightsPanel" class="insights-panel glass-panel" style="display: none;">
+        <div class="insights-header">
+          <h3>🤖 AI Insights</h3>
+          <button id="refreshInsights" class="btn-small">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh
+          </button>
+        </div>
+        <div id="insightsContent" class="insights-content">
+          <p class="loading">Analyzing your browsing patterns...</p>
+        </div>
+      </div>
+
       <!-- Tab Navigation -->
       <div class="tab-container">
         <button class="tab-btn active" data-tab="all">
@@ -50,11 +65,15 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           Page Visits
         </button>
+        <button class="tab-btn" data-tab="insights">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10"></path><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          AI Insights
+        </button>
       </div>
 
       <div class="controls glass-panel">
         <div class="control-group">
-          <label for="languageFilter">Filter by language (searches)</label>
+          <label for="languageFilter">Filter by language</label>
           <div class="select-wrapper">
             <select id="languageFilter">
               <option value="">All Languages</option>
@@ -64,6 +83,8 @@
               <option value="Go">Go</option>
               <option value="Rust">Rust</option>
               <option value="C#">C#</option>
+              <option value="Java">Java</option>
+              <option value="C++">C++</option>
             </select>
             <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </div>
@@ -84,9 +105,6 @@
       </div>
 
       <div id="visitsContainer" class="visits-list"></div>
-      
-      <!-- Keep the old container for backward compatibility with searches -->
-      <div id="searchesContainer" class="grid-container" style="display: none;"></div>
     </div>
 
     <script src="app.js"></script>
